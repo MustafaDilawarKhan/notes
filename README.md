@@ -35,12 +35,20 @@ Ask Claude in your own words. For example:
 - *"I have 12 weeks of slides in ~/Downloads/Biology. Give me a revision PDF for the exam."*
 - *"Turn chapters 1–5 of this textbook PDF into one-page summaries with tables."*
 
-## Requirements
+## What you need
 
-- **Python 3.8 or newer**
-- **One of Chrome, Edge, Chromium or Brave** (most computers already have one). Without a browser, `pip install playwright` followed by `playwright install chromium` also works.
-- Optional: `pip install pymupdf` for reading PDF lectures and for page previews.
-- Optional: **LibreOffice**, or Microsoft Office on Windows, for old `.ppt` and `.doc` files.
+**Usually nothing.** If your lectures are PowerPoint (`.pptx`) or Word (`.docx`) files and you use a normal Windows, Mac or Linux computer, just ask Claude for notes and it does everything for you.
+
+Behind the scenes the skill uses **Python** and a **web browser** (Chrome, Edge, Chromium or Brave). Claude's apps and most computers already have both: Windows always has Edge.
+
+You only need something extra in two cases:
+
+| Your situation | What to add |
+|---|---|
+| Your lectures are **PDF** files | `pip install pymupdf` (Claude can do this for you) |
+| You have **old** `.ppt` or `.doc` files | LibreOffice or Microsoft Office. You can also re-save the files as `.pptx` or PDF. |
+
+If no browser can be used, you still get your notes as a web page, which you can save as a PDF with **Print → Save as PDF**.
 
 ## How it works
 
