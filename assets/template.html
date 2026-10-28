@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{TITLE}}</title>
+<style>
+/* One A4 page per <section class="page">. Fonts are in pt so print = screen. */
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: "Segoe UI", -apple-system, "Helvetica Neue", "Liberation Sans", "DejaVu Sans", Arial, sans-serif;
+  color: #1d232b; background: #fff;
+}
+
+.page {
+  --h: 215;                                  /* accent hue; auto-assigned per page if not set inline */
+  --ac: hsl(var(--h) 62% 40%);
+  --acl: hsl(var(--h) 70% 96%);
+  --acm: hsl(var(--h) 55% 88%);
+  width: 210mm; height: 297mm; padding: 9mm 10mm 8mm;
+  display: flex; flex-direction: column; overflow: hidden;
+  page-break-after: always; break-after: page;
+  font-size: 9pt; line-height: 1.32;
+}
+.page:last-child { page-break-after: auto; break-after: auto; }
+
+/* header */
+.hd { display: flex; align-items: flex-end; gap: 3mm; border-bottom: 2.2pt solid var(--ac); padding-bottom: 1.6mm; }
+.wk { background: var(--ac); color: #fff; border-radius: 1.5mm; padding: 1.2mm 2.4mm; text-align: center; line-height: 1.05; min-width: 13mm; }
+.wk small { display: block; font-size: .72em; letter-spacing: .08em; font-weight: 600; opacity: .9; }
+.wk b { font-size: 1.9em; }
+.hd h1 { font-size: 1.75em; line-height: 1.1; color: #10161d; }
+.src { font-size: .86em; color: #5b6673; margin-top: .5mm; }
+.src b { color: #2e3742; font-weight: 600; }
+.pg { margin-left: auto; font-size: .8em; color: #8a94a0; white-space: nowrap; }
+
+.idea { margin-top: 2mm; background: var(--acl); border-left: 2.4pt solid var(--ac); padding: 1.4mm 2.4mm; border-radius: 0 1.2mm 1.2mm 0; }
+.idea::before { content: "BIG IDEA  "; font-weight: 800; color: var(--ac); font-size: .82em; letter-spacing: .06em; }
+
+/* body: two balanced columns; blocks never split */
+.cols { column-count: 2; column-gap: 4.5mm; margin-top: 2.2mm; }
+.blk { break-inside: avoid; page-break-inside: avoid; margin-bottom: 2.2mm; }
+.blk.wide { column-span: all; }
+.blk h2 { font-size: 1.02em; color: var(--ac); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .7mm; display: flex; align-items: baseline; gap: 1.5mm; }
+.blk h2 span { text-transform: none; letter-spacing: 0; color: #6b7682; font-weight: 500; font-size: .9em; }
+.blk h2 i { text-transform: none; }
+.blk p, .blk li { margin-bottom: .45mm; }
+.blk ul { padding-left: 3.6mm; }
+.blk li::marker { color: var(--ac); }
+.blk table + p, .blk table + ul, .blk p + table, .blk ul + table, .blk table + table { margin-top: .6mm; }
+.note { color: #56616d; font-size: .92em; }
+.case { background: #f6f7f9; border: .6pt solid #e2e6ea; border-radius: 1.2mm; padding: 1mm 2mm; }
+.case b:first-child { color: var(--ac); }
+li.case { list-style: none; margin-left: -3.6mm; }
+.f { font-family: Consolas, Menlo, "DejaVu Sans Mono", "Liberation Mono", monospace; background: var(--acl); border: .6pt solid var(--acm); border-radius: 1mm; padding: .5mm 1.6mm; display: inline-block; font-size: .95em; }
+
+/* tables */
+table { width: 100%; border-collapse: collapse; font-size: .96em; }
+th { background: var(--ac); color: #fff; text-align: left; font-weight: 600; padding: .6mm 1.4mm; }
+td { padding: .55mm 1.4mm; border-bottom: .5pt solid #e1e5e9; vertical-align: top; }
+tr:nth-child(even) td { background: #f7f8fa; }
+td:first-child { font-weight: 600; }
+table.plain td:first-child { font-weight: 400; }   /* use for 2-column comparisons where both sides are equal */
+td.n, th.n { white-space: nowrap; }
+tr.win td, td.win { background: hsl(140 60% 91%) !important; font-weight: 700; }
+.good { color: hsl(145 60% 30%); font-weight: 600; }
+.bad { color: hsl(0 60% 42%); font-weight: 600; }
+.warn { color: hsl(35 80% 35%); font-weight: 600; }
+tr.gp td { background: var(--acl) !important; color: var(--ac); font-weight: 700; font-size: .92em; text-transform: uppercase; letter-spacing: .04em; padding-top: .4mm; padding-bottom: .4mm; }
+
+/* key people */
+.people td:first-child { color: var(--ac); white-space: nowrap; }
+
+/* footer pinned to the bottom of the page */
+.ft { margin-top: auto; border-top: .8pt solid var(--acm); padding-top: 1.6mm; display: grid; gap: 1.2mm; }
+.must { background: hsl(45 100% 95%); border: .7pt solid hsl(45 80% 70%); border-radius: 1.2mm; padding: 1.2mm 2.4mm; }
+.must b.t { color: hsl(35 80% 32%); letter-spacing: .05em; font-size: .86em; }
+.must b.t::before { content: "★ "; }
+.must ol { padding-left: 4mm; columns: 2; column-gap: 5mm; margin-top: .4mm; }
+.must li { margin-bottom: .3mm; break-inside: avoid; }
+.hook { font-size: .94em; color: #3f4954; }
+.hook::before { content: "Memory hook → "; font-weight: 700; color: var(--ac); }
+
+@media screen {
+  body { background: #d9dde2; padding: 8mm 0; }
+  .page { margin: 0 auto 8mm; background: #fff; box-shadow: 0 1mm 4mm rgba(0,0,0,.18); }
+}
+</style>
+</head>
+<body>
+<!--BODY-->
+<script>
+/* 1) Give each page its own accent colour unless the section sets style="--h:NNN".
+   2) Shrink each page's font just enough to fit one A4 sheet; record the result in data-fit
+      (build_pdf.py reads it to report which pages are too dense). */
+(function () {
+  var HUES = [215, 172, 265, 24, 140, 330, 0, 195, 45, 290, 100, 350];
+  var MAX = 9.2, MIN = 6.6;
+  document.querySelectorAll('.page').forEach(function (p, i) {
+    if (!p.style.getPropertyValue('--h')) p.style.setProperty('--h', HUES[i % HUES.length]);
+    var f = MAX;
+    p.style.fontSize = f + 'pt';
+    while (p.scrollHeight > p.clientHeight + 1 && f > MIN) {
+      f = Math.round((f - 0.1) * 10) / 10;
+      p.style.fontSize = f + 'pt';
+    }
+    p.dataset.fit = f + (p.scrollHeight > p.clientHeight + 1 ? ' OVERFLOW' : '');
+  });
+})();
+</script>
+</body>
+</html>
